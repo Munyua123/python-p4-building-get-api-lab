@@ -22,11 +22,21 @@ def index():
 def bakeries():
     bakeries = []
 
+
     for bakery in Bakery.query.all():
+        baked_goods = [{
+            "name": goods.name, 
+            "price": goods.price,
+            "created_at":goods.created_at,
+            "updated_at":goods.updated_at
+            } 
+            for goods in bakery.baked_goods
+            ]
         bakeries_dict = {
             "id": bakery.id,
-            "name": bakery.name,
             "created_at": bakery.created_at,
+            "name": bakery.name,
+            "baked_goods": baked_goods,
             "updated_at":bakery.updated_at
         }
         bakeries.append(bakeries_dict)
@@ -46,11 +56,19 @@ def bakery_by_id(id):
     if bakery is None:
         # Return a 404 response if the bakery with the given ID is not found
         return make_response(jsonify({"error": "Bakery not found"}), 404)
-    
+    baked_goods = [{
+            "name": goods.name, 
+            "price": goods.price,
+            "created_at":goods.created_at,
+            "updated_at":goods.updated_at
+            } 
+            for goods in bakery.baked_goods
+            ]
     bakery_dict = {
         "id":bakery.id,
         "name": bakery.name,
         "created_at": bakery.created_at,
+        "baked_goods": baked_goods,
         "updated_at": bakery.updated_at
     }
 
